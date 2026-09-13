@@ -19,7 +19,7 @@ defmodule EventFlow.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create_user(map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  @spec create_user(map()) :: {:ok, %User{}} | {:error, Ecto.Changeset.t()}
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
