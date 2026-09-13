@@ -25,4 +25,18 @@ defmodule EventFlow.Accounts do
     |> User.changeset(attrs)
     |> Repo.insert()
   end
+
+  @doc """
+  Lista todos os usuários cadastrados
+
+  ## Exmplos
+
+      iex> list_users()]
+      {:ok, {%User{}}}
+
+  """
+  @spec list_users() :: [%User{}]
+  def list_users do
+    Repo.all(User)
+  end
 end

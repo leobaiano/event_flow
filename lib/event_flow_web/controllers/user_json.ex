@@ -18,6 +18,24 @@ defmodule EventFlowWeb.UserJSON do
   end
 
   @doc """
+  Renderiza a lista completa de usuários.
+  """
+  def index(%{users: users}) do
+    %{
+      data: for(user <- users, do: data(user))
+    }
+  end
+
+  # Função privada auxiliar para formatar cada usuário da lista
+  defp data(%User{} = user) do
+    %{
+      id: user.id,
+      email: user.email,
+      inserted_at: user.inserted_at
+    }
+  end
+
+  @doc """
   Renderiza os erros de validação do Changeset em formato JSON.
   """
   def error(%{changeset: changeset}) do

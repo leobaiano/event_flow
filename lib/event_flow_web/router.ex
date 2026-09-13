@@ -9,6 +9,7 @@ defmodule EventFlowWeb.Router do
     pipe_through :api
 
     post "/users", UserController, :create
+    get "/users", UserController, :index
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

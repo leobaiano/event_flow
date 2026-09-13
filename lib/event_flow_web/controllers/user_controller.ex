@@ -19,4 +19,15 @@ defmodule EventFlowWeb.UserController do
         |> render(:error, changeset: changeset)
     end
   end
+
+  @doc """
+  Action para listar os usuários via HTTP GET.
+  """
+  def index(conn, _params) do
+    users = Accounts.list_users()
+
+    conn
+    |> put_status(:ok) # opcional, pois 200 é o padrão
+    |> render(:index, users: users)
+  end
 end
