@@ -9,11 +9,7 @@ defmodule EventFlowWeb.UserJSON do
   """
   def show(%{user: %User{} = user}) do
     %{
-      data: %{
-        id: user.id,
-        email: user.email,
-        inserted_at: user.inserted_at
-      }
+      data: data(user)
     }
   end
 
