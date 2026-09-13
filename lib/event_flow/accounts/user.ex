@@ -19,6 +19,7 @@ defmodule EventFlow.Accounts.User do
     |> validate_required([:email, :password])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "deve ter um formato de e-mail válido")
     |> validate_length(:password, min: 6, message: "deve ter pelo menos 6 caracteres")
+    |> unique_constraint(:email, message: "e-mail já cadastrado")
     |> put_pass_hash()
   end
 
