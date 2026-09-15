@@ -35,11 +35,13 @@ defmodule EventFlow.Accounts.User do
   end
 
   # Função privada para criptografar a senha
-  defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
-    # Por enquanto, utilizaremos uma simulação de hash funcional.
-    # Na etapa de autenticação completa, utilizaremos o Bcrypt.
-    change(changeset, password_hash: "hash_simulado_#{password}")
-  end
+  defp put_pass_hash(changeset) do
+    case fetch_change(changeset, :password) do
+      {:ok, password} ->
+        put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))
 
-  defp put_pass_hash(changeset), do: changeset
+      :error ->
+        changeset
+    end
+  end
 end
