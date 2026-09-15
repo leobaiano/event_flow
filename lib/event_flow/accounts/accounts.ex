@@ -56,4 +56,18 @@ defmodule EventFlow.Accounts do
   def get_user(id) do
     Repo.get(User, id)
   end
+
+  @doc """
+  Deleta um usuário do banco de dados.
+
+  ## Exemplos
+
+      iex> delete_user(user)
+      {:ok, %User{}}
+
+  """
+  @spec delete_user(%User{}) :: {:ok, %User{}} | {:error, Ecto.Changeset.t()}
+  def delete_user(%User{} = user) do
+    Repo.delete(user)
+  end
 end

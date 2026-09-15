@@ -48,4 +48,24 @@ defmodule EventFlowWeb.UserController do
         |> json(%{error: "Usuário não encontrado"})
     end
   end
+
+  @doc """
+  Action para deletar um usuário via HTTP DELETE
+  """
+  def delete(conn, %{"id" => id}) do
+    case Accounts.get_user(id) do
+      %User{} = user ->
+        {:ok, _deleted_user} = Accounts.delete_user(user)
+
+        conn
+        |> put_status(:no_content)
+        |> send_resp(:no_content, "")
+
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Usuário não encontrado"})
+    end
+
+  end
 end
