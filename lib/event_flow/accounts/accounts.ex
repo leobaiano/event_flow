@@ -70,4 +70,21 @@ defmodule EventFlow.Accounts do
   def delete_user(%User{} = user) do
     Repo.delete(user)
   end
+
+  @doc """
+  Atualiza dados de um usuário do banco de dados
+
+  ## Exemplos
+
+      iex> update_user(%{id:"1", email: "valid@email.com", password: "123456"})
+      {:ok, %User{}}
+
+      iex> update_user(%{id: "1", email: "bad", password: "123"})
+      {:error, %Ecto.Changeset{}}
+  """
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.update_changeset(attrs)
+    |> Repo.update()
+  end
 end

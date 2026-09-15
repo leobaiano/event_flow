@@ -68,4 +68,29 @@ defmodule EventFlowWeb.UserController do
     end
 
   end
+
+ @doc """
+  Action para editar um usuário via HTTP PATCH pelo ID.
+  """
+  def update(conn, %{"id" => id, "user" => user_params}) do
+    case Accounts.get_user(id) do
+      %User{} = user ->
+        case Accounts.update_user(user, user_params) do
+          {:ok, updated_user} ->
+            conn
+            |> put_status(:ok)
+            |> render(:show, user: updated_user)
+
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render(:error, changeset: changeset)
+        end
+
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Usuário não encontrado"})
+    end
+  end
 end

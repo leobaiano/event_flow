@@ -12,6 +12,7 @@ defmodule EventFlowWeb.Router do
     get "/users", UserController, :index
     get "/users/:id", UserController, :show
     delete "/users/:id", UserController, :delete
+    patch "/users/:id", UserController, :update
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

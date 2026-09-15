@@ -23,6 +23,17 @@ defmodule EventFlow.Accounts.User do
     |> put_pass_hash()
   end
 
+  # Changeset de atualização (exige apenas email)
+  def update_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email])
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/)
+    |> validate_length(:password, min: 6)
+    |> unique_constraint(:email, message: "já está em uso por outro usuário")
+    |> put_pass_hash()
+  end
+
   # Função privada para criptografar a senha
   defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
     # Por enquanto, utilizaremos uma simulação de hash funcional.
