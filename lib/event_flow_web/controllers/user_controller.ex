@@ -2,6 +2,7 @@ defmodule EventFlowWeb.UserController do
   use EventFlowWeb, :controller
 
   alias EventFlow.Accounts
+  alias EventFlow.Accounts.User
 
   @doc """
   Action para criar um novo usuário via HTTP POST.
@@ -29,5 +30,22 @@ defmodule EventFlowWeb.UserController do
     conn
     |> put_status(:ok) # opcional, pois 200 é o padrão
     |> render(:index, users: users)
+  end
+
+  @doc """
+  Action para retornar um usuário via HTTP GET pelo ID.
+  """
+  def show(conn, %{"id" => id}) do
+    case Accounts.get_user(id) do
+      %User{} = user ->
+        conn
+        |> put_status(:ok)
+        |> render(:show, user: user)
+
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Usuário não encontrado"})
+    end
   end
 end

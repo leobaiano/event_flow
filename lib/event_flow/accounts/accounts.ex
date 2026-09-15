@@ -39,4 +39,21 @@ defmodule EventFlow.Accounts do
   def list_users do
     Repo.all(User)
   end
+
+  @doc """
+  Retorna um usuário com base no ID. Retorna %User{} ou nil.
+
+  ## Exemplos
+
+      iex> get_user(1)
+      %User{}
+
+      iex> get_user(999)
+      nil
+
+  """
+  @spec get_user(term()) :: %User{} | nil
+  def get_user(id) do
+    Repo.get(User, id)
+  end
 end
