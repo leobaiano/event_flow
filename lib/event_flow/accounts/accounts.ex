@@ -87,4 +87,30 @@ defmodule EventFlow.Accounts do
     |> User.update_changeset(attrs)
     |> Repo.update()
   end
+
+  @doc """
+  Busca um usuário com base no E-MAIL
+  """
+  def get_user_by_email(email) do
+    Repo.get_by(User, email: email)
+  end
+
+  @doc """
+  Autentica o usuário comparando a senha informada com a hash salva.
+  Protegido contra Timing Attacks e Enumeração de Usuários.
+  """
+  def authenticate_user(email, password) when is_binary(email) and is_binary(password) do
+    case get_user_by_email(email) do
+      nil ->
+        # Executa um cálculo fictício de hash para consumir o mesmo tempo computacional
+        Bcrypt.no_user_verify()
+        {:error, :invalid_credentials}
+
+      user ->
+        case Bcrypt.verify_pass(password, user.password_hash) do
+          true -> {:ok, user}
+          false -> {:error, :invalid_credentials}
+        end
+      end
+  end
 end

@@ -8,11 +8,15 @@ defmodule EventFlowWeb.Router do
   scope "/api", EventFlowWeb do
     pipe_through :api
 
+    # Accounts
     post "/users", UserController, :create
     get "/users", UserController, :index
     get "/users/:id", UserController, :show
     delete "/users/:id", UserController, :delete
     patch "/users/:id", UserController, :update
+
+    # Session
+    post "/sessions", SessionController, :create
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
