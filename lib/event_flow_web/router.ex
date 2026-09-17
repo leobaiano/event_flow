@@ -1,31 +1,41 @@
 defmodule EventFlowWeb.Router do
   use EventFlowWeb, :router
 
+  # Pipeline básico para respostas em JSON
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  # Pipeline privado que exige token JWT válido
+  pipeline :authenticated_api do
+    plug :accepts, ["json"]
+    plug EventFlowWeb.Plugs.Authenticate
+  end
+
+  # Rotas PÚBLICAS (não exigem autenticação)
   scope "/api", EventFlowWeb do
     pipe_through :api
 
-    # Accounts
     post "/users", UserController, :create
+    post "/sessions", SessionController, :create
+  end
+
+  # Rotas PROTEGIDAS (exigem token JWT no cabeçalho)
+  scope "/api", EventFlowWeb do
+    pipe_through :authenticated_api
+
+    # Consulta dos dados do usuário logado
+    get "/me", SessionController, :me
+
+    # Gestão de usuários
     get "/users", UserController, :index
     get "/users/:id", UserController, :show
     delete "/users/:id", UserController, :delete
     patch "/users/:id", UserController, :update
-
-    # Session
-    post "/sessions", SessionController, :create
   end
 
-  # Enable LiveDashboard and Swoosh mailbox preview in development
+  # Dashboard e Mailbox em ambiente de desenvolvimento
   if Application.compile_env(:event_flow, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do

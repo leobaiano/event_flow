@@ -19,4 +19,12 @@ defmodule EventFlowWeb.SessionController do
         |> json(%{error: "Credenciais inválidas"})
     end
   end
+
+  def me(conn, _params) do
+    user = conn.assigns.current_user
+
+    conn
+    |> put_status(:ok)
+    |> render(:show, user: user, token: nil)
+  end
 end

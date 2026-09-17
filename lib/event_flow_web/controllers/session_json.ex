@@ -13,6 +13,15 @@ defmodule EventFlowWeb.SessionJSON do
     }
   end
 
+  @doc """
+  Renderiza as mensagens de erro de sessão/autenticação.
+  """
+  def error(%{message: message}) do
+    %{
+      error: message
+    }
+  end
+
   # Função privada auxiliar para formatar os dados expostos do usuário
   defp data(%User{} = user, token) do
     %{
